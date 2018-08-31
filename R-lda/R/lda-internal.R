@@ -1,14 +1,14 @@
 .slda.collapsed.gibbs.sampler <-
 function (documents, K, vocab, num.iterations, alpha, eta, annotations,
     beta, variance, logistic = FALSE, method = "sLDA", lambda,
-    initial = NULL, compute.log.likelihood = FALSE, trace = 0L)
+    initial = NULL, compute.log.likelihood = FALSE, trace = 0L,freeze.topics=FALSE)
 {
     retval <- structure(.Call("collapsedGibbsSampler", documents,
         as.integer(K), as.integer(length(vocab)), as.integer(num.iterations),
         as.double(alpha), as.double(eta),if (!logistic) as.double(annotations) else if (method=="sLDA" & logistic) as.integer(annotations) else as.logical(annotations),
         as.double(beta), as.double(variance), pmatch(method,
             c("sLDA", "corrLDA", "prodLDA")), as.double(lambda),
-        NULL, NULL, initial, NULL, as.logical(compute.log.likelihood), trace, FALSE), names = c("assignments",
+        NULL, NULL, initial, NULL, as.logical(compute.log.likelihood), trace, as.logical(freeze.topics)), names = c("assignments",
         "topics", "topic_sums", "document_sums", NA, 
         NA, NA, NA, NA, if (compute.log.likelihood) "log.likelihoods" else NA))
     colnames(retval$topics) <- vocab
